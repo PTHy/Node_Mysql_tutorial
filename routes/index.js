@@ -3,11 +3,11 @@ let connection = mysql_dbc.init();
 mysql_dbc.test_open(connection);
 let stmt;
 
-module.exports() = (app) => {
+module.exports = (app) => {
 
   app.get('/api/books', (req, res) => {
-    stmt = 'SELET * FROM BOOKS'
-    connection.query(stmt,, (err, rows, fields) => {
+    stmt = 'SELECT * FROM BOOKS';
+    connection.query(stmt, (err, rows, fields) => {
       if(!err)
         console.log(rows);
       else
@@ -16,13 +16,25 @@ module.exports() = (app) => {
   });
 
   //Get Book by Author
-  app.get('/api/books/author/:author', (req, res) => {
-
+  app.get('/api/books/author/:input_author', (req, res) => {
+    stmt = 'SELECT * FROM BOOKS WHERE author = '+req.params.input_author;
+    connection.query(stmt, (err, rows, fields) => {
+      if(!err)
+        console.log(rows);
+      else
+        console.log("Mysql Error "+err);
+    });
   });
 
   //Get Single Book
   app.get('/api/books/:book_id', (req, res) => {
-
+    stmt = 'SELECCT * FROM BOOKS WHERE BOOK_ID = '+req.params.book_id;
+    connection.query(stmt, (err, rows, fields) => {
+      if(!err)
+        console.log(rows);
+      else
+        console.log("Mysql Error "+err);
+    });
   });
 
   //Create Book
@@ -37,9 +49,12 @@ module.exports() = (app) => {
 
   //Delete Book
   app.delete('/api/books/:book_id', (req, res) => {
-
+    stmt = 'DELETE FROM BOOKS WHERE BOOK_ID = '+req.params.book_id;
+    connection.query(stmt,(err, rows, fields) => {
+      if(!err)
+        console.log(rows);
+      else
+        console.log("Mysql Error "+err);
+    });
   });
-
-
-
 }
