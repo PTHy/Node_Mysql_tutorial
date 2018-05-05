@@ -45,7 +45,7 @@ module.exports = (app) => {
 
   //Create Book
   app.post('/api/books', function(req, res){
-    stmt = "insert into books ('title','author') values ('" + req.body.title + "','" + req.body.author + "')";
+    stmt = "insert into books (title,author) values (" + req.body.title + "','" + req.body.author + ")";
     connection.query(stmt, (err, rows, fields) => {
       if(err) res.status(500).json({Error : err});
       else res.json({message : "insert succecssful"});
