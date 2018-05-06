@@ -8,9 +8,9 @@ module.exports = (app) => {
   app.get('/api/books', (req, res) => {
     stmt = 'SELECT * FROM BOOKS';
     connection.query(stmt, (err, rows, fields) => {
-      if(!err && rows.length != 0)
+      if(!err && rows != 0)
         return res.send(rows);
-      else if(rows.length == 0)
+      else if(rows == 0)
         return res.status(404).json({Error : "books are not found"});
       else
         return res.status(500).json({Error : err})
@@ -21,9 +21,9 @@ module.exports = (app) => {
   app.get('/api/books/author/:input_author', (req, res) => {
     stmt = "SELECT * FROM BOOKS WHERE author = \'"+req.params.input_author+"\'";
     connection.query(stmt, (err, rows, fields) => {
-      if(!err && rows.length != 0)
+      if(!err && rows != 0)
         return res.send(rows);
-      else if(rows.length == 0)
+      else if(rows == 0)
         return res.status(404).json({Error : "book  is not found"});
       else
         return res.status(500).json({Error : err})
@@ -32,11 +32,11 @@ module.exports = (app) => {
 
   //Get Single Book
   app.get('/api/books/:book_id', (req, res) => {
-    stmt = 'SELECT * FROM BOOKS WHERE BOOK_ID = '+req.params.book_id;
+    stmt = 'SELECT * FROM books where book_id = \''+req.params.book_id+'\'';
     connection.query(stmt, (err, rows, fields) => {
-      if(!err && rows.length != 0)
+      if(!err && rows != 0)
         return res.send(rows);
-      else if(rows.length == 0)
+      else if(rows == 0)
         return res.status(404).json({Error : "book is not found"});
       else
         return res.status(500).json({Error : err})
@@ -45,7 +45,9 @@ module.exports = (app) => {
 
   //Create Book
   app.post('/api/books', function(req, res){
-    stmt = "insert into books (title,author) values (" + req.body.title + "','" + req.body.author + ")";
+    var book_title = req.body.title;
+    var book_author = req.body.author;
+    stmt = "insert into books (\'title\',\'author\') values (\'" + book_title + "\',\'" + book_author + "\')";
     connection.query(stmt, (err, rows, fields) => {
       if(err) res.status(500).json({Error : err});
       else res.json({message : "insert succecssful"});
