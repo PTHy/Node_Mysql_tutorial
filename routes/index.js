@@ -30,9 +30,9 @@ module.exports = (app) => {
     });
   });
 
-  //Get Single Book
-  app.get('/api/books/:book_id', (req, res) => {
-    stmt = 'SELECT * FROM books where book_id = \''+req.params.book_id+'\'';
+  //Get Single Book by title
+  app.get('/api/books/:title', (req, res) => {
+    stmt = 'SELECT * FROM books where title = \''+req.params.title+'\'';
     connection.query(stmt, (err, rows, fields) => {
       if(!err && rows != 0)
         return res.send(rows);
@@ -45,12 +45,10 @@ module.exports = (app) => {
 
   //Create Book
   app.post('/api/books', function(req, res){
-    let book_title = req.body.title;
-    let book_author = req.body.author;
-    stmt = "insert into books (\'title\',\'author\') values (\'" + book_title + "\',\'" + book_author + "\')";
+    stmt = 'insert into books (title,author) values (\''+req.body.title+'\',\''+req.body.author+'\')';
     connection.query(stmt, (err, rows, fields) => {
       if(err) res.status(500).json({Error : err});
-      else res.json({message : "insert succecssful"});
+      res.send({message : "insert successful"});
     });
   });
 
