@@ -45,8 +45,8 @@ module.exports = (app) => {
 
   //Create Book
   app.post('/api/books', function(req, res){
-    var book_title = req.body.title;
-    var book_author = req.body.author;
+    let book_title = req.body.title;
+    let book_author = req.body.author;
     stmt = "insert into books (\'title\',\'author\') values (\'" + book_title + "\',\'" + book_author + "\')";
     connection.query(stmt, (err, rows, fields) => {
       if(err) res.status(500).json({Error : err});
@@ -57,14 +57,14 @@ module.exports = (app) => {
   //Update The Book
   app.put('/api/books/:book_id', (req, res) => {
     stmt = "update books set";
-    if(req.body.title) stmt += " title = '"+req.body.title + "'";
+    if(req.body.title) stmt += " title = \'"+req.body.title + "\'";
     if(req.body.author) {
       if(req.body.title)
         stmt += ",";
-      stmt += " author = '"+req.body.author + "'";
+      stmt += " author = \'"+req.body.author + "\'";
     }
 
-    stmt += "where book_id = '"+req.params.book_id+"'";
+    stmt += "where book_id = \'"+req.params.book_id+"\'";
 
     connection.query(stmt,(err,rows,fields) => {
       if(err) res.status(500).json({Error : err});
@@ -76,7 +76,8 @@ module.exports = (app) => {
   app.delete('/api/books/:book_id', (req, res) => {
     stmt = 'DELETE FROM BOOKS WHERE BOOK_ID = '+req.params.book_id;
     connection.query(stmt,(err, rows, fields) => {
-      return res.status(203)
+      if(err) res.send({message : err});
+      return res.status(203).end();
     });
   });
 }
